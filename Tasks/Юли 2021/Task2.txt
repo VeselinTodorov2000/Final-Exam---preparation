@@ -1,0 +1,92 @@
+#include <string>
+
+class Item {
+std::string label;
+virtual int hash() = 0;
+};
+
+class Pencil : protected Item {}
+
+class Box : public Item {
+Item* contents;
+public:
+void store(Item* something) {
+    contents = something;
+}
+};
+
+A) Член-променливата label на класа
+Item е protected.
+Отговор: Не, защото по подразбиране е private
+
+Б) Един обект от тип Pencil може да се
+съхрани в себе си.
+Да 
+
+В) Един обект от тип Box може да се
+съхрани сам в себе си.
+Да
+
+Г) Един обект от тип Pencil може да се
+съхрани в две кутии едновременно.
+Да - защото пазим указатели, а не стойности
+
+Д) От класа Box НЕ МОГАТ да се създават обекти, но могат да се създават указатели (pointer) и псевдоними (reference).
+- Не е вярно. Box не е абстрактен
+
+Е) Кодът за Pencil ще предизвика компилационна грешка, защото в тялото на класа не е дефинирано нищо.
+- Да трябва да имплементира hash()
+
+Ж) Един обект от тип Box може да се съхрани в друг обект от тип Box. - Да
+
+З) Класът Pencil наследява виртуално класа Item. - Не
+
+И) Всеки обект от тип Pencil има член
+label, който е protected. - Не, има label който е private
+
+К) Класът Pencil е абстрактен. - Не
+
+Л) Обекти от тип Item не могат да се създават, защото в класа не е дефиниран нито един конструктор. - Не, има default по подразбиране
+М) При създаването на обект от тип Box
+не се задава стойност за contents и
+тази променлива остава неинициализирана. - Не
+
+// b)
+
+#include <iostream>
+class base {
+public:
+base() { std::cout << "base::base()\n"; }
+~base() { std::cout << "base::~base()\n"; }
+virtual void f() { std::cout << "base::f()\n"; };
+};
+
+class derived : public base {
+public:
+derived() { std::cout << "derived::derived()\n"; }
+~derived() { std::cout << "derived::~derived()\n"; }
+virtual void f() { std::cout << "derived::f()\n"; }
+};
+
+int main()
+{
+base* p = new derived(); //1
+p->f(); //2
+base obj = *p;
+obj.f(); //3
+delete p; //4
+}
+
+Ред //1 ще изведе:
+base::base()
+derived::derived()
+
+Ред //2 ще изведе
+derived::f()
+
+Ред //3 ще изведе:
+base::f()
+
+Ред //4 ще изведe:
+~derived()
+~base()
